@@ -8,6 +8,10 @@ output: html_document
 hi Katie
 ## Loading the data
 
+Hello everyone 
+hi
+hi emma
+
 ```{r, include=FALSE}
 load("house_elections.rda")
 load("candidates.rda")
