@@ -14,3 +14,7 @@ load("committees.rda")
 load("contributions.rda")
 ```
 
+
+
+
+Possibly in contributions: group by committee, summarise the average contribution, left join with committees
