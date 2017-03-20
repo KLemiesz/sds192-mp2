@@ -5,12 +5,8 @@ date: "March 24, 2017"
 output: html_document
 ---
 
-
+hi Katie
 ## Loading the data
-
-Hello everyone 
-hi
-
 
 ```{r, include=FALSE}
 load("house_elections.rda")
