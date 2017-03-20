@@ -6,6 +6,10 @@ output: html_document
 ---
 
 ## Loading the data
+```{r}
+library(dplyr)
+data <- left_join(committees, contributions)
+```
 
 ```{r, include=FALSE}
 load("house_elections.rda")
