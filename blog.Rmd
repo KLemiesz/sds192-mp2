@@ -14,3 +14,27 @@ load("committees.rda")
 load("contributions.rda")
 ```
 
+```{r}
+library(dplyr)
+```
+
+```{r}
+table1 <- contributions %>%
+  group_by(cmte_id) %>%
+  summarise(avg_contrib = mean(transaction_amt))
+table1
+```
+
+```{r}
+table2 <- committees %>%
+  select(cmte_id, cmte_name, tres_name, cmte_state, cmte_party_affiliation, connected_org_name)
+table2
+glimpse(table2)
+```
+```{r}
+ourtable <- table2 %>%
+  full_join(table1, by = "cmte_id")
+glimpse(ourtable)
+```
+
+
