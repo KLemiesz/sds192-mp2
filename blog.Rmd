@@ -9,6 +9,7 @@ output: html_document
 ## Loading the data
 
 Hello everyone 
+hi
 
 
 ```{r, include=FALSE}
