@@ -6,6 +6,10 @@ output: html_document
 ---
 
 ## Loading the data
+```{r}
+library(dplyr)
+data <- left_join(committees, contributions)
+```
 
 ```{r, include=FALSE}
 load("house_elections.rda")
@@ -14,10 +18,12 @@ load("committees.rda")
 load("contributions.rda")
 ```
 
+<<<<<<< HEAD
 ```{r}
 library(dplyr)
 ```
 
+Group by committee id and find average donation amt
 ```{r}
 table1 <- contributions %>%
   group_by(cmte_id) %>%
@@ -25,16 +31,45 @@ table1 <- contributions %>%
 table1
 ```
 
+Select specific variables from committees
 ```{r}
 table2 <- committees %>%
   select(cmte_id, cmte_name, tres_name, cmte_state, cmte_party_affiliation, connected_org_name)
 table2
 glimpse(table2)
 ```
+
+Join committees and contributions with select variables 
 ```{r}
 ourtable <- table2 %>%
   full_join(table1, by = "cmte_id")
 glimpse(ourtable)
 ```
 
+A pipeline to find mean contributions by party affiliation in NY
+```{r}
+ourtable %>%
+  select(Party = cmte_party_affiliation, State = cmte_state, Donations = avg_contrib) %>%
+  group_by(Party) %>%
+  filter(State == "NY") %>%
+  summarise(AvgDonations = mean(Donations))
+```
+
+Make that pipeline into a function to find mean contributions by party affiliation in different states
+```{r}
+ByState <- function(state_arg) {
+  ourtable %>%
+  select(Party = cmte_party_affiliation, State = cmte_state, Donations = avg_contrib) %>%
+  group_by(Party) %>%
+  filter(State == state_arg) %>%
+  summarise(AvgDonations = mean(Donations))
+}
+```
+
+Try using the function
+```{r}
+ByState(state_arg = "NY")
+```
+
+***Need to get rid of NAs
 
