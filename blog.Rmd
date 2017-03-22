@@ -5,6 +5,7 @@ date: "March 24, 2017"
 output: html_document
 ---
 
+<<<<<<< HEAD
 ## Required libraries
 ```{r, message=FALSE}
 library(dplyr)
@@ -21,11 +22,17 @@ load("contributions.rda")
 
 ## Data wrangling
 ```{r}
+library(dplyr)
+```
+
+Group by committee id and find average donation amt
+```{r}
 table1 <- contributions %>%
   group_by(cmte_id) %>%
   summarise(avg_contrib = mean(transaction_amt))
 ```
 
+Select specific variables from committees
 ```{r}
 table2 <- committees %>%
   select(cmte_id, cmte_name, tres_name, cmte_state, cmte_party_affiliation, connected_org_name)
@@ -44,5 +51,39 @@ glimpse(newTable)
 
 ```{r}
 ggplot(newTable, aes(x = cmte_id, y = avg_contrib)) + geom_point()
+```
+
+A pipeline to find mean contributions by party affiliation in NY
+```{r}
+ourtable %>%
+  select(Party = cmte_party_affiliation, State = cmte_state, Donations = avg_contrib) %>%
+  group_by(Party) %>%
+  filter(State == "NY") %>%
+  summarise(AvgDonations = mean(Donations))
+```
+
+Make that pipeline into a function to find mean contributions by party affiliation in different states
+```{r}
+ByState <- function(state_arg) {
+  ourtable %>%
+  select(Party = cmte_party_affiliation, State = cmte_state, Donations = avg_contrib) %>%
+  group_by(Party) %>%
+  filter(State == state_arg) %>%
+  summarise(AvgDonations = mean(Donations))
+}
+```
+
+Try using the function on one state
+```{r}
+ByState(state_arg = "NY")
+```
+
+***Need to get rid of NAs
+
+Create a list of states, and use function ByState on each state
+```{r}
+state_lst <- c("AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY")
+
+lapply(state_lst, FUN = ByState)
 ```
 
