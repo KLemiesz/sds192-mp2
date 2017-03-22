@@ -49,6 +49,18 @@ newTable <- na.omit(ourtable)
 glimpse(newTable)
 ```
 
+
+```{r}
+stateTable <- newTable%>%
+  group_by(cmte_state)%>%
+  summarise(stateAverage = mean(avg_contrib))%>%
+  filter(cmte_state != "GU") %>%
+  filter(cmte_state != "PR") %>%
+  filter(cmte_state != "MP") %>%
+  filter(cmte_state != "VI") 
+  
+```
+
 ```{r}
 ggplot(newTable, aes(x = cmte_id, y = avg_contrib)) + geom_point()
 ```
