@@ -57,12 +57,13 @@ stateTable <- newTable%>%
   filter(cmte_state != "GU") %>%
   filter(cmte_state != "PR") %>%
   filter(cmte_state != "MP") %>%
-  filter(cmte_state != "VI") 
+  filter(cmte_state != "VI") %>%
+  arrange(desc(stateAverage))
   
 ```
 
 ```{r}
-ggplot(newTable, aes(x = cmte_id, y = avg_contrib)) + geom_point()
+ggplot(stateTable, aes(x = reorder(cmte_state, stateAverage), y = stateAverage)) + geom_bar(stat = "identity") + coord_flip() 
 ```
 
 A pipeline to find mean contributions by party affiliation in NY
