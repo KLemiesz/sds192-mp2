@@ -5,7 +5,6 @@ date: "March 24, 2017"
 output: html_document
 ---
 
-
 ## Required libraries
 ```{r, message=FALSE}
 library(dplyr)
@@ -44,46 +43,23 @@ ourtable <- table2 %>%
 glimpse(ourtable)
 ```
 
+Get rid of NAs
 ```{r}
 newTable <- na.omit(ourtable)
-glimpse(newTable)
 ```
 
 ```{r}
-ggplot(newTable, aes(x = cmte_id, y = avg_contrib)) + geom_point()
+stateTable <- newTable%>%
+  group_by(cmte_state)%>%
+  summarise(stateAverage = mean(avg_contrib))%>%
+  filter(cmte_state != "GU") %>%
+  filter(cmte_state != "PR") %>%
+  filter(cmte_state != "MP") %>%
+  filter(cmte_state != "VI") %>%
+  arrange(desc(stateAverage))
+
 ```
 
-A pipeline to find mean contributions by party affiliation in NY
 ```{r}
-ourtable %>%
-  select(Party = cmte_party_affiliation, State = cmte_state, Donations = avg_contrib) %>%
-  group_by(Party) %>%
-  filter(State == "NY") %>%
-  summarise(AvgDonations = mean(Donations))
+ggplot(stateTable, aes(x = reorder(cmte_state, stateAverage), y = stateAverage)) + geom_bar(stat = "identity") + coord_flip()
 ```
-
-Make that pipeline into a function to find mean contributions by party affiliation in different states
-```{r}
-ByState <- function(state_arg) {
-  ourtable %>%
-  select(Party = cmte_party_affiliation, State = cmte_state, Donations = avg_contrib) %>%
-  group_by(Party) %>%
-  filter(State == state_arg) %>%
-  summarise(AvgDonations = mean(Donations))
-}
-```
-
-Try using the function on one state
-```{r}
-ByState(state_arg = "NY")
-```
-
-***Need to get rid of NAs
-
-Create a list of states, and use function ByState on each state
-```{r}
-state_lst <- c("AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY")
-
-lapply(state_lst, FUN = ByState)
-```
-
