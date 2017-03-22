@@ -20,9 +20,6 @@ load("contributions.rda")
 ```
 
 ## Data wrangling
-```{r}
-library(dplyr)
-```
 
 Group by committee id and find average donation amt
 ```{r}
