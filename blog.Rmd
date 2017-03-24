@@ -5,53 +5,47 @@ date: "March 26, 2017"
 output: html_document
 ---
 
-## Required libraries
-```{r, message=FALSE, warning=FALSE}
+
+```{r, message=FALSE, warning=FALSE, include=FALSE}
 library(dplyr)
 library(ggplot2)
 library(RColorBrewer)
 library(ggthemes)
-library(colorRamps)
-library(colorspace)
 ```
 
-## Loading the data
 ```{r, include=FALSE}
-load("house_elections.rda")
-load("candidates.rda")
 load("committees.rda")
 load("contributions.rda")
-
 ```
 
 ## Data wrangling
-
-Group by committee id and find average donation amt
+Group `contributions` data frame by committee ID and find average donation amount per committee.
 ```{r}
 table1 <- contributions %>%
   group_by(cmte_id) %>%
   summarise(avg_contrib = mean(transaction_amt))
 ```
 
-Select specific variables from committees
+Select specific variables from the `committees` data frame for analysis.
 ```{r}
 table2 <- committees %>%
   select(cmte_id, cmte_name, tres_name, cmte_state, cmte_party_affiliation, connected_org_name)
 ```
 
+Join the restructured `table1` and `table2` by `cmte_id` (committee id).
 ```{r}
 ourtable <- table2 %>%
   full_join(table1, by = "cmte_id")
 glimpse(ourtable)
 ```
 
-Get rid of NAs
+Get rid of rows without a specified party (NAs).
 ```{r}
 newTable <- na.omit(ourtable)
 glimpse(newTable)
 ```
 
-
+Group the new data frame, `newTable`, by state and filter out non-states (donations were recieved from other areas, such as Puerto Rico which is designated by PR). Compute the average contribuation size per state, then arrange the table by descending contribution size.
 ```{r}
 stateTable <- newTable%>%
   group_by(cmte_state)%>%
@@ -64,9 +58,14 @@ stateTable <- newTable%>%
   
 ```
 
+Make a visualization of the state averages for comparison. We chose a bar graph because each state's contribution is independent of the other states' contributions. It is also an easy way to visually compare the states.
 ```{r}
-ggplot(stateTable, aes(x = reorder(cmte_state, stateAverage), y = stateAverage, fill= cmte_state)) + geom_bar(stat = "identity") + coord_flip() + scale_color_hue()+ labs(title = "Average Committee Contribution by State", x="State", y = "State Average Contribution")
+stateAveragePlot <-ggplot(stateTable, aes(x = reorder(cmte_state, stateAverage), y = stateAverage, fill= stateAverage)) + geom_bar(stat = "identity") + coord_flip() + scale_color_hue()+ labs(title = "Average Committee Contribution by State", x="State", y = "State Average Contribution")
+
+stateAveragePlot
 ```
+
+
 
 A pipeline to find mean contributions by party affiliation in NY
 ```{r}
