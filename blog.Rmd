@@ -1,12 +1,12 @@
 ---
 title: "Mini-Project 2"
-author: "Your Name Here"
-date: "March 24, 2017"
+author: "JiYoung Yun, Emma Utz, Katherine Lemiesz"
+date: "March 26, 2017"
 output: html_document
 ---
 
 ## Required libraries
-```{r, message=FALSE}
+```{r, message=FALSE, warning=FALSE}
 library(dplyr)
 library(ggplot2)
 library(RColorBrewer)
@@ -77,18 +77,4 @@ ourtable %>%
   summarise(AvgDonations = mean(Donations))
 ```
 
-```{r}
-stateTable <- newTable%>%
-  group_by(cmte_state)%>%
-  summarise(stateAverage = mean(avg_contrib))%>%
-  filter(cmte_state != "GU") %>%
-  filter(cmte_state != "PR") %>%
-  filter(cmte_state != "MP") %>%
-  filter(cmte_state != "VI") %>%
-  arrange(desc(stateAverage))
 
-```
-
-```{r}
-ggplot(stateTable, aes(x = reorder(cmte_state, stateAverage), y = stateAverage)) + geom_bar(stat = "identity") + coord_flip()
-```
