@@ -67,13 +67,20 @@ stateAveragePlot
 
 
 
-A pipeline to find mean contributions by party affiliation in NY
+A pipeline funciton to find mean contributions by party affiliation
 ```{r}
-ourtable %>%
+partyContribution <-function(state_arg) {
+  newTable %>%
   select(Party = cmte_party_affiliation, State = cmte_state, Donations = avg_contrib) %>%
   group_by(Party) %>%
-  filter(State == "NY") %>%
+  filter(State == state_arg) %>%
   summarise(AvgDonations = mean(Donations))
+}
 ```
 
+Try applying the function to various states we're interested in based off our Average State Contribution data visualization:
+```{r}
+state_lst <- c("NV", "NC", "MA", "CA", "ME")
+lapply(state_lst, FUN = partyContribution)
+```
 
