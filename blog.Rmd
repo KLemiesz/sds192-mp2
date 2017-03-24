@@ -9,6 +9,10 @@ output: html_document
 ```{r, message=FALSE}
 library(dplyr)
 library(ggplot2)
+library(RColorBrewer)
+library(ggthemes)
+library(colorRamps)
+library(colorspace)
 ```
 
 ## Loading the data
@@ -17,6 +21,7 @@ load("house_elections.rda")
 load("candidates.rda")
 load("committees.rda")
 load("contributions.rda")
+
 ```
 
 ## Data wrangling
@@ -60,7 +65,7 @@ stateTable <- newTable%>%
 ```
 
 ```{r}
-ggplot(stateTable, aes(x = reorder(cmte_state, stateAverage), y = stateAverage)) + geom_bar(stat = "identity") + coord_flip() 
+ggplot(stateTable, aes(x = reorder(cmte_state, stateAverage), y = stateAverage, fill= cmte_state)) + geom_bar(stat = "identity") + coord_flip() + scale_color_hue()+ labs(title = "Average Committee Contribution by State", x="State", y = "State Average Contribution")
 ```
 
 A pipeline to find mean contributions by party affiliation in NY
