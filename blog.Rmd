@@ -80,7 +80,7 @@ partyContribution <-function(state_arg) {
 
 Try applying the function to various states we're interested in based off our Average State Contribution data visualization:
 ```{r}
-state_lst <- c("NV", "NC", "MA", "CA", "ME")
+state_lst <- c("NV", "CO", "FL", "NH", "NC", "OH", "VA","WI","IA","ME")
 lapply(state_lst, FUN = partyContribution)
 ```
 
