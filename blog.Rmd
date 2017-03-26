@@ -98,7 +98,7 @@ TryThis <-function(state_arg) {
   filter(State == state_arg) %>%
   summarise(AvgDonations = mean(Donations)) %>%
     ggplot(aes(x=Party, y=AvgDonations, fill= Party)) +
-    geom_bar(stat="identity") + scale_color_manual(values = c(DEM = "blue", REP = "red", LIB = "green"))
+    geom_bar(stat="identity") + scale_color_manual(values = c(DEM = "blue", REP = "red", LIB = "green")) + labs(title = state_arg)
 }
 
 ```
