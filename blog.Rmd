@@ -13,7 +13,7 @@ Our visualization summarizes the average amount of a political contribution made
 We hypothesized initially that swing states would be among those with the highest donation levels, since candidates are working on their campaigns more actively in those states and likely engaging with committees there, leading them to have a greater impact on the committees in those states and induce them to contribute funds (whether for or against). Therefore, an interesting conclusion from our first visualization was that 5 of the 9 officially recognized swing states in 2012 (namely, Nevada, Virginia, North Carolina, Ohio, and Iowa) were in the top 12 for average donations. This offers substantial support for our theory. We believe we may be able to gain more insight with future work looking also at total contributions.  
 
 ### Contributions in Swing States by Party
-The most striking result of this analysis is that the largest averages in most states were those with no party affiliation. In Nevada, Virginia, and Maine, the Republican party average was much higher than the others. We assume that this may be tied to the controversial intricacies of campaign finance. Many committees may not want to disclose their affiliation or preference for one party or another, as they may have to work with the "opponent" in the future if their candidate does not get elected. 
+The most striking result of this analysis is that the largest average donations in most states were those with no party affiliation. In Nevada, Virginia, and Maine, the Republican party average was much higher than the others. We assume that this may be tied to the controversial intricacies of campaign finance. Many committees may not want to disclose their affiliation or preference for one party or another, as they may have to work with the "opponent" in the future if their candidate does not get elected. 
 
 ```{r, message=FALSE, warning=FALSE, include=FALSE}
 library(dplyr)
@@ -67,6 +67,7 @@ stateTable <- newTable%>%
   
 ```
 
+## Visualizations
 Make a visualization of the state averages for comparison. We chose a bar graph because each state's contribution is independent of the other states' contributions. It is also an easy way to visually compare the states.
 ```{r}
 stateAveragePlot <-ggplot(stateTable, aes(x = reorder(cmte_state, stateAverage), y = stateAverage, fill= stateAverage)) + geom_bar(stat = "identity") + coord_flip() + scale_color_hue()+ labs(title = "Average Committee Contribution by State", x="State", y = "State Average Contribution") 
