@@ -18,6 +18,9 @@ load("committees.rda")
 load("contributions.rda")
 ```
 
+## Summary
+Our visualization summarizes the average amount of a political contribution made by committees in each of the 50 states (and DC) for the 2012 elections. We then take the analysis a step further and generate a visual comparison of average contributions by the major parties in each of the states classified as “swing states” in 2012. 
+
 ## Data wrangling
 Group `contributions` data frame by committee ID and find average donation amount per committee.
 ```{r}
@@ -64,8 +67,6 @@ stateAveragePlot <-ggplot(stateTable, aes(x = reorder(cmte_state, stateAverage),
 stateAveragePlot
 ```
 
-
-
 A pipeline function to find mean contributions by party affiliation
 ```{r}
 partyContribution <-function(state_arg) {
@@ -103,4 +104,3 @@ Use lapply() to apply the plot function to the swing state list
 state_lst <- c("NV", "CO", "FL", "NH", "NC", "OH", "VA","WI","IA","ME")
 lapply(state_lst, FUN = TryThis)
 ```
-
