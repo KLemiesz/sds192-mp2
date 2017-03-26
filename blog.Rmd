@@ -60,14 +60,13 @@ stateTable <- newTable%>%
 
 Make a visualization of the state averages for comparison. We chose a bar graph because each state's contribution is independent of the other states' contributions. It is also an easy way to visually compare the states.
 ```{r}
-stateAveragePlot <-ggplot(stateTable, aes(x = reorder(cmte_state, stateAverage), y = stateAverage, fill= stateAverage)) + geom_bar(stat = "identity") + coord_flip() + scale_color_hue()+ labs(title = "Average Committee Contribution by State", x="State", y = "State Average Contribution")
-
+stateAveragePlot <-ggplot(stateTable, aes(x = reorder(cmte_state, stateAverage), y = stateAverage, fill= stateAverage)) + geom_bar(stat = "identity") + coord_flip() + scale_color_hue()+ labs(title = "Average Committee Contribution by State", x="State", y = "State Average Contribution") 
 stateAveragePlot
 ```
 
 
 
-A pipeline funciton to find mean contributions by party affiliation
+A pipeline function to find mean contributions by party affiliation
 ```{r}
 partyContribution <-function(state_arg) {
   newTable %>%
@@ -82,5 +81,26 @@ Try applying the function to various states we're interested in based off our Av
 ```{r}
 state_lst <- c("NV", "CO", "FL", "NH", "NC", "OH", "VA","WI","IA","ME")
 lapply(state_lst, FUN = partyContribution)
+
+```
+
+Create a function that will plot the Average Donations by state as a bar chart
+```{r}
+TryThis <-function(state_arg) {
+  newTable %>%
+  select(Party = cmte_party_affiliation, State = cmte_state, Donations = avg_contrib) %>%
+  group_by(Party) %>%
+  filter(State == state_arg) %>%
+  summarise(AvgDonations = mean(Donations)) %>%
+    ggplot(aes(x=Party, y=AvgDonations)) +
+    geom_bar(stat="identity")
+}
+
+```
+
+Use lapply() to apply the plot function to the swing state list
+```{r}
+state_lst <- c("NV", "CO", "FL", "NH", "NC", "OH", "VA","WI","IA","ME")
+lapply(state_lst, FUN = TryThis)
 ```
 
