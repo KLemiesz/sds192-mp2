@@ -38,13 +38,11 @@ Join the restructured `table1` and `table2` by `cmte_id` (committee id).
 ```{r}
 ourtable <- table2 %>%
   full_join(table1, by = "cmte_id")
-glimpse(ourtable)
 ```
 
 Get rid of rows without a specified party (NAs).
 ```{r}
 newTable <- na.omit(ourtable)
-glimpse(newTable)
 ```
 
 Group the new data frame, `newTable`, by state and filter out non-states (donations were recieved from other areas, such as Puerto Rico which is designated by PR). Compute the average contribuation size per state, then arrange the table by descending contribution size.
@@ -57,7 +55,7 @@ stateTable <- newTable%>%
   filter(cmte_state != "MP") %>%
   filter(cmte_state != "VI") %>%
   arrange(desc(stateAverage))
-  
+glimpse(stateTable) 
 ```
 
 ## Visualizations
@@ -96,20 +94,20 @@ TryThis <-function(state_arg) {
   select(Party = cmte_party_affiliation, State = cmte_state, Donations = avg_contrib) %>%
   group_by(Party) %>%
   filter(State == state_arg) %>%
+    filter(Party != "") %>%
   summarise(AvgDonations = mean(Donations)) %>%
-    ggplot(aes(x=Party, y=AvgDonations, fill= Party)) +
-    geom_bar(stat="identity") + scale_color_manual(values = c(DEM = "blue", REP = "red", LIB = "green")) + labs(title = state_arg)
+    ggplot(aes(x=Party, y=AvgDonations, fill = Party)) +
+    geom_bar(stat="identity") + scale_fill_manual(values = c(DEM = "steelblue3", REP = "firebrick3", LIB = "springgreen4", NNE = "deeppink4", UNK = "darkslategray4", IND = "goldenrod3")) + labs(title = state_arg)
 }
-
 ```
 
 Use lapply() to apply the plot function to the swing state list:
-```{r}
+```{r, message =FALSE}
 swing_state_lst <- c("NV", "CO", "FL", "NH", "NC", "OH", "VA","WI","IA","ME")
 lapply(swing_state_lst, FUN = TryThis)
 ```
 
-## Conclusions and Insights
-### Contributions in Swing States by Party
+
+## Contributions in Swing States by Party
 The most striking result of this analysis is that the largest average donations in most states were those with no party affiliation. In Nevada, Virginia, and Maine, the Republican party average was much higher than the others. We assume that this may be tied to the controversial intricacies of campaign finance. Many committees may not want to disclose their affiliation or preference for one party or another, as they may have to work with the "opponent" in the future if their candidate does not get elected. 
 
